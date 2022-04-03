@@ -1,0 +1,6 @@
+---
+- name: Initialise environment for Python development
+  hosts:
+    - python
+  roles:
+    - python
