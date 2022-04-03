@@ -1,0 +1,20 @@
+---
+- name: "Install homebrew packages"
+  community.general.homebrew:
+    name: [
+      "pyenv",
+    ]
+    state: present
+    update_homebrew: yes
+
+- name: "Install homebrew casks"
+  community.general.homebrew_cask:
+    name: "{{ item }}"
+  ignore_errors: yes
+  with_items: 
+    - pycharm
+
+- name: "Install and set default Python"
+  ignore_errors: yes
+  shell: |
+    pyenv install 3.9:latest

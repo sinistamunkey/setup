@@ -1,0 +1,6 @@
+---
+- name: Install all the things
+  hosts: localhost
+  roles:
+    - { role: common }
+    - { role: python }
