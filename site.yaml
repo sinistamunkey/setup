@@ -1,0 +1,3 @@
+#!/usr/local/bin/ansible-playbook
+- import_playbook: playbooks/development.yaml
+- import_playbook: playbooks/python.yaml

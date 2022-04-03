@@ -1,0 +1,40 @@
+---
+- name: Install Oh My ZSH
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  args:
+    creates: "/Users/{{ lookup('env', 'USER') }}/.oh-my-zsh"
+
+- name: "Create a default ZSH configuration"
+  template:
+    src: templates/.zshrc.j2
+    dest: /Users/{{ lookup('env', 'USER') }}/.zshrc
+    owner: "{{ lookup('env', 'USER') }}"
+    force: yes
+  
+- name: "Install homebrew packages"
+  community.general.homebrew:
+    name: [
+      "ag",
+      "bat",
+      "fzf",
+      "gh",
+      "k9s",
+      "pyenv",
+      "jq",
+      "tmux"
+    ]
+    state: present
+    update_homebrew: yes
+
+- name: "Install homebrew casks"
+  community.general.homebrew_cask:
+    name: "{{ item }}"
+  ignore_errors: yes
+  with_items: 
+    - firefox
+    - iterm2
+
+- name: Install Oh My ZSH
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  args:
+    creates: "/Users/{{ lookup('env', 'USER') }}/.oh-my-zsh"

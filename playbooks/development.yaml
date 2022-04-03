@@ -1,0 +1,6 @@
+---
+- name: Initialise generic development environment
+  hosts:
+    - localhost
+  roles:
+    - common
