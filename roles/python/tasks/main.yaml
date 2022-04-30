@@ -1,20 +1,20 @@
 ---
-- name: "Install homebrew packages"
+- name: Install homebrew packages
   community.general.homebrew:
-    name: [
-      "pyenv",
-    ]
-    state: present
-    update_homebrew: yes
-
-- name: "Install homebrew casks"
-  community.general.homebrew_cask:
     name: "{{ item }}"
-  ignore_errors: yes
-  with_items: 
-    - pycharm
+    state: present
+  with_items:
+    - pyenv
 
-- name: "Install and set default Python"
-  ignore_errors: yes
-  shell: |
-    pyenv install 3.9:latest
+- name: Install and set default Python
+  ansible.builtin.shell: |
+    "pyenv install {{ python_version }}"
+  args:
+    creates: "/Users/{{ lookup('env', 'USER') }}/.pyenv/versions/{{ python_version }}"
+
+- name: Configure PyEnv
+  ansible.builtin.blockinfile:
+    path: /Users/{{ lookup('env', 'USER') }}/.zshrc
+    block: |
+      eval "$(pyenv init --path)"
+      eval "$(pyenv init -)"
