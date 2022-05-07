@@ -4,3 +4,4 @@
     - localhost
   roles:
     - common
+    - python

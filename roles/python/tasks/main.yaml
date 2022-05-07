@@ -11,10 +11,3 @@
     "pyenv install {{ python_version }}"
   args:
     creates: "/Users/{{ lookup('env', 'USER') }}/.pyenv/versions/{{ python_version }}"
-
-- name: Configure PyEnv
-  ansible.builtin.blockinfile:
-    path: /Users/{{ lookup('env', 'USER') }}/.zshrc
-    block: |
-      eval "$(pyenv init --path)"
-      eval "$(pyenv init -)"

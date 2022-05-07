@@ -1,17 +1,18 @@
 ---
 - name: Install Oh My ZSH
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  ansible.builtin.shell: |
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   args:
-    creates: "/Users/{{ lookup('env', 'USER') }}/.oh-my-zsh"
+    creates: /Users/{{ lookup('env', 'USER') }}/.oh-my-zsh
 
-- name: "Create a default ZSH configuration"
-  template:
+- name: Create a default ZSH configuration
+  ansible.builtin.template:
     src: templates/.zshrc.j2
     dest: /Users/{{ lookup('env', 'USER') }}/.zshrc
     owner: "{{ lookup('env', 'USER') }}"
     force: yes
   
-- name: "Install homebrew packages"
+- name: Install homebrew packages
   community.general.homebrew:
     name: [
       "ag",
@@ -19,17 +20,13 @@
       "fzf",
       "gh",
       "k9s",
-<<<<<<< HEAD
-      "pyenv",
-=======
->>>>>>> feature/add-python-role
       "jq",
       "tmux"
     ]
-    state: present
+    state: latest
     update_homebrew: yes
 
-- name: "Install homebrew casks"
+- name: Install homebrew casks
   community.general.homebrew_cask:
     name: "{{ item }}"
   ignore_errors: yes
@@ -38,7 +35,14 @@
     - iterm2
     - visual-studio-code
 
-- name: Install Oh My ZSH
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  args:
-    creates: "/Users/{{ lookup('env', 'USER') }}/.oh-my-zsh"
+- name: Ensure tmux directory exists
+  ansible.builtin.file:
+    path: /Users/{{ lookup("env", "USER") }}/.tmux
+    state: directory
+
+- name: Configure tmux
+  ansible.builtin.template:
+    src: templates/.tmux.j2
+    dest: /Users/{{ lookup("env", "USER") }}/.tmux/.tmux.conf
+    owner: "{{ lookup('env', 'USER') }}"
+    force: yes
